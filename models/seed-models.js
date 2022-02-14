@@ -22,3 +22,16 @@ exports.fetchArticleById = (article_id) => {
         return article
     })
 };
+
+exports.updateArticle = (articleId, votes) => {
+    return db.query(
+        `UPDATE articles
+        SET votes = votes + $2
+        WHERE article_id = $1
+        RETURNING *;`,
+        [articleId, votes]
+    )
+    .then(({ rows }) => {
+        return rows[0]
+    })
+}

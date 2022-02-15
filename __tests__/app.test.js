@@ -52,7 +52,9 @@ describe('GET', () => {
                 res.body.users.forEach((user) => {
                     expect(user).toEqual(
                         expect.objectContaining({
-                            username: expect.any(String)
+                            username: expect.any(String),
+                            name: expect.any(String),
+                            avatar_url: expect.any(String)
                         })
                     )
                 })

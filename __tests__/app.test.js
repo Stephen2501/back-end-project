@@ -83,7 +83,7 @@ describe('ERROR', () => {
             })
         })
         describe('getArticleByID', () => {
-            test('status: 400, returns when a bad request is made', () => {
+            test('status: 400, returns "Bad request" - id input NAN', () => {
                 return request(app)
                 .get("/api/articles/article")
                 .expect(400)
@@ -91,7 +91,7 @@ describe('ERROR', () => {
                     expect(res.body).toEqual( { msg: "Bad request"})
                 })
             })
-            test('status: 404, returns when an invalid id is input', () => {
+            test('status: 404, returns message when no resource found', () => {
                 return request(app)
                 .get("/api/articles/9999999")
                 .expect(404)
@@ -103,7 +103,7 @@ describe('ERROR', () => {
     })
     describe('PATCH', () => {
         describe('patchArticle', () => {
-            test('status: 400, returns an empty object', () => {
+            test('status: 400, returns an empty object - malformed body', () => {
                 return request(app)
                 .patch("/api/articles/2")
                 .send({})
@@ -112,7 +112,7 @@ describe('ERROR', () => {
                     expect(res.body).toEqual({})
                 })
             });
-            test('status: 400, returns', () => {
+            test('status: 400, returns message "Bad request" - incorrect type', () => {
                 const updateArticle = {votes: 'one hundred'}
                 return request(app)
                 .patch("/api/articles/2")

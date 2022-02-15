@@ -48,8 +48,17 @@ describe('GET', () => {
             .get("/api/users")
             .expect(200)
             .then((res) => {
-                expect(res.body.users).toHaveLength(4)
-            )}        
+                expect(res.body.users).toHaveLength(4);
+                res.body.users.forEach((user) => {
+                    expect(user).toEqual(
+                        expect.objectContaining({
+                            username: expect.any(String),
+                            name: expect.any(String),
+                            avatar_url: expect.any(String)
+                        })
+                    )
+                })
+            })        
         })
     });
 });
@@ -110,7 +119,6 @@ describe('ERROR', () => {
                 })
             })
         })
-    })
     describe('PATCH', () => {
         describe('patchArticle', () => {
             test('status: 400, returns an empty object - malformed body', () => {
@@ -119,9 +127,9 @@ describe('ERROR', () => {
                 .send({})
                 .expect(400)
                 .then((res) => {
-                    expect(res.body).toEqual({})
-                })
-            });
+                    expect(res.body).toEqual({msg: "Missing required fields"})
+                    })
+                });
             test('status: 400, returns message "Bad request" - incorrect type', () => {
                 const updateArticle = {votes: 'one hundred'}
                 return request(app)
@@ -130,8 +138,9 @@ describe('ERROR', () => {
                 .expect(400)
                 .then((res) => {
                     expect(res.body).toEqual( {msg: 'Bad request'})
-                })
-            });
-        })
-    });
+                    })
+                });
+            })
+        });
+    })
 })

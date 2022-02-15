@@ -1,4 +1,4 @@
-const {fetchTopics, fetchArticleById, updateArticle} = require('../models/seed-models')
+const {fetchTopics, fetchArticleById, updateArticle, fetchUsers} = require('../models/seed-models')
 
 exports.getTopics = (req, res, next) => {
     fetchTopics().then((topics) => {
@@ -21,9 +21,8 @@ exports.getArticleById = (req, res, next) => {
 
 exports.patchArticle = (req, res) => {
     const articleId = (req.params.article_id);
-    console.log(typeof req.body.votes)
     if (typeof req.body.votes === 'undefined'){
-        res.status(400).send();
+        res.status(400).send({msg: "Missing required fields"});
     } 
     else if (typeof req.body.votes === 'number') {
         updateArticle(articleId, req.body.votes).then((article) => {
@@ -33,4 +32,10 @@ exports.patchArticle = (req, res) => {
     else {
         res.status(400).send({msg: 'Bad request'})
     }
+}
+
+exports.getUsers = (req, res) => {
+    fetchUsers().then((users) => {
+        res.status(200).send({users})
+    })
 }

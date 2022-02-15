@@ -35,3 +35,12 @@ exports.updateArticle = (articleId, votes) => {
         return rows[0]
     })
 }
+
+exports.fetchUsers = () => {
+    return db
+    .query("SELECT * FROM users;")
+    .then(({rows: users}) => {
+        console.log(users)
+        return users
+    })
+}

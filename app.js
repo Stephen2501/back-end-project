@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const {getTopics, getArticleById, patchArticle} = require('./controllers/seed-controller')
+const {getTopics, getArticleById, patchArticle, getUsers} = require('./controllers/seed-controller')
 const {serverError, invalidPath, badRequest, notFound} = require('./controllers/error-controller')
 app.use(express.json());
 

@@ -1,4 +1,4 @@
-const {fetchTopics, fetchArticleById} = require('../models/seed-models')
+const {fetchTopics, fetchArticleById, fetchUsers} = require('../models/seed-models')
 
 exports.getTopics = (req, res, next) => {
     fetchTopics().then((topics) => {
@@ -13,6 +13,15 @@ exports.getArticleById = (req, res, next) => {
     const {article_id} = req.params
     fetchArticleById(article_id).then((article) => {
         res.status(200).send({article})
+    })
+    .catch((err) => {
+        next(err)
+    })
+}
+
+exports.getUsers = (req, res, next) => {
+    fetchUsers().then((users) => {
+        res.status(200).send({users})
     })
     .catch((err) => {
         next(err)

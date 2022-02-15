@@ -42,6 +42,16 @@ describe('GET', () => {
             })
         });
     })
+    describe('/api/users', () => {
+        test('Status: 200, responds with an array of users', () => {
+            return request(app)
+            .get("/api/users")
+            .expect(200)
+            .then((res) => {
+                expect(res.body.users).toHaveLength(4)
+            )}        
+        })
+    });
 });
 
 describe('Errors', () => {

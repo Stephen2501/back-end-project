@@ -81,6 +81,24 @@ describe('GET', () => {
             })
         });
     });
+    describe('/api/articles/:article_id/comments', () => {
+        test('Status: 200, responds with an array of comments for the selected article', () => {
+            return request(app)
+            .get('/api/articles/6/comments')
+            .expect(200)
+            .then((res) => {
+                expect(res.body.articles.comments).toEqual(
+                    expect.objectContaining({
+                    comment_id: expect.any(String),
+                    votes: expect.any(Number),
+                    created_at: expect.any(String),
+                    author: expect.any(String),
+                    body: expect.any(String)
+                })
+                )
+            })
+        });
+    });
 });
 
 describe('PATCH', () => {

@@ -57,3 +57,8 @@ exports.fetchArticles = () => {
         return articles
     })
 }
+
+exports.fetchArticleComments = (articleId) => {
+    return db
+    .query(`SELECT comments.* FROM comments`)
+}

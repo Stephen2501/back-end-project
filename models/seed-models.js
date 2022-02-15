@@ -40,7 +40,15 @@ exports.fetchUsers = () => {
     return db
     .query("SELECT * FROM users;")
     .then(({rows: users}) => {
-        console.log(users)
         return users
+    })
+}
+
+exports.fetchArticles = () => {
+    return db
+    .query("SELECT * FROM articles ORDER BY created_at DESC")
+    .then(({rows: articles}) => {
+        console.log(articles)
+        return articles
     })
 }

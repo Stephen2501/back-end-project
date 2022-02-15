@@ -61,6 +61,16 @@ describe('GET', () => {
             })        
         })
     });
+    describe('/api/articles', () => {
+        test('Status: 200, responds with an array of articles ordered by descending date', () => {
+            return request(app)
+            .get("/api/articles")
+            .expect(200)
+            .then((res) => {
+                expect(res.body.articles).toBeSortedBy("created_at", { descending: true})
+            })
+        });
+    });
 });
 
 describe('PATCH', () => {

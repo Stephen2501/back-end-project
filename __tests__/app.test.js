@@ -43,6 +43,14 @@ describe('GET', () => {
                 )
             })
         });
+        test('Status: 200, responds with the specified article with the new column comment_count', () => {
+            return request(app)
+            .get("/api/articles/1")
+            .expect(200)
+            .then(({body}) => {
+                expect(body.article.comment_count).toBe('11')
+            })
+        })
     })
     describe('/api/users', () => {
         test('Status: 200, responds with an array of users', () => {

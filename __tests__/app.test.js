@@ -139,7 +139,7 @@ describe('PATCH', () => {
 })
 describe('ERROR', () => {
     describe('GET', () => {
-        describe('getTopics', () => {
+        describe('api/topics', () => {
             test('status: 404, returns invalid path string', () => {
                 return request(app)
                 .get("/api/invalidPath")
@@ -149,7 +149,7 @@ describe('ERROR', () => {
                 })
             })
         })
-        describe('getArticleByID', () => {
+        describe('/api/articles/:article_id', () => {
             test('status: 400, returns "Bad request" - id input NAN', () => {
                 return request(app)
                 .get("/api/articles/article")
@@ -167,7 +167,7 @@ describe('ERROR', () => {
                 })
             })
         })
-        describe('getArticleComments', () => {
+        describe('/api/articles/:article_id/comments', () => {
             test('Status: 404, returns message when no article found', () => {
                 return request(app)
                 .get('/api/articles/99999/comments')
@@ -178,7 +178,7 @@ describe('ERROR', () => {
             })
         });
     describe('PATCH', () => {
-        describe('patchArticle', () => {
+        describe('/api/articles/:article_id', () => {
             test('status: 400, returns an empty object - malformed body', () => {
                 return request(app)
                 .patch("/api/articles/2")

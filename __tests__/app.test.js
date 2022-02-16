@@ -80,7 +80,20 @@ describe('GET', () => {
                 expect(res.body.articles).toBeSortedBy("created_at", { descending: true})
             })
         });
-       
+        test('Status: 200, responds with the included comment_count column', () => {
+            return request(app)
+            .get("/api/articles")
+            .expect(200)
+            .then((res) => {
+                res.body.articles.forEach((article) => {
+                    expect(article).toEqual(
+                        expect.objectContaining({
+                            comment_count: expect.any(String)
+                        })
+                    )
+                })
+            })
+        })
     });
     describe('/api/articles/:article_id/comments', () => {
         test('Status: 200, responds with an array of comments for the selected article', () => {

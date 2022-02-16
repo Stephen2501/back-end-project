@@ -87,16 +87,26 @@ describe('GET', () => {
             .get('/api/articles/6/comments')
             .expect(200)
             .then((res) => {
-                expect(res.body.articles.comments).toEqual(
+                res.body.comments.forEach((comment) => {
+                    expect(comment).toEqual(
                     expect.objectContaining({
-                    comment_id: expect.any(String),
+                    article_id: expect.any(Number),
+                    comment_id: expect.any(Number),
                     votes: expect.any(Number),
                     created_at: expect.any(String),
                     author: expect.any(String),
                     body: expect.any(String)
-                })
+                    })
                 )
             })
+        });
+    })
+        test('Status: 200, responds with an empty array', () => {
+            return request(app)
+            .get('/api/articles/2/comments')
+            .expect(200)
+            .then((res) => {
+                expect(res.body.comments).toEqual([])
         });
     });
 });
@@ -126,7 +136,7 @@ describe('PATCH', () => {
         })
     });
 })
-
+})
 describe('ERROR', () => {
     describe('GET', () => {
         describe('getTopics', () => {
@@ -157,6 +167,16 @@ describe('ERROR', () => {
                 })
             })
         })
+        describe('getArticleComments', () => {
+            test('Status: 404, returns message when no article found', () => {
+                return request(app)
+                .get('/api/articles/99999/comments')
+                .expect(404)
+                .then((res) => {
+                    expect(res.body).toEqual({msg: "No article found for article_id: 99999"})
+                })
+            })
+        });
     describe('PATCH', () => {
         describe('patchArticle', () => {
             test('status: 400, returns an empty object - malformed body', () => {

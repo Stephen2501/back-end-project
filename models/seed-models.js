@@ -150,8 +150,6 @@ exports.checkTopicExists = (topic) => {
         }
       });
     }
-    else return db.query("SELECT * FROM topics WHERE slug =$1;", [topic])
-    
   };
 
 

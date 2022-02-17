@@ -49,20 +49,47 @@ exports.fetchUsers = () => {
   });
 };
 
-exports.fetchArticles = () => {
-  return db
-    .query(
-      `
+exports.fetchArticles = (sort_by = 'created_at', order_by = 'DESC', topic) => {
+   
+    const validSortBys = ['article_id', 'title', 'body', 'author', 'topic', 'created_at', 'votes', 'comment_count']
+    const validOrderBys = ['ASC', 'DESC']
+    const validTopics = ['mitch', 'cats']
+    
+    
+    if(!validSortBys.includes(sort_by)) {
+        return Promise.reject({status: 400, msg: "Bad request"});
+    }
+    
+    if(!validOrderBys.includes(order_by)) {
+        return Promise.reject({status: 400, msg: "Bad request"});
+    }
+    
+
+
+    let queryStr = `
     SELECT articles.*, COUNT(comments.article_id) AS comment_count 
     FROM articles 
-    LEFT JOIN comments ON articles.article_id = comments.article_id
-    GROUP BY articles.article_id
-    ORDER BY articles.created_at DESC;`
-    )
+    LEFT JOIN comments ON articles.article_id = comments.article_id `
+
+    const queryValues = []
+    if(topic) {
+        if(!validTopics.includes(topic)) {
+            return Promise.reject({status: 400, msg: "Bad request"});
+        }
+        queryStr += `WHERE topic = $1 `;
+        queryValues.push(topic)
+    }
+        
+    queryStr += `GROUP BY articles.article_id `
+    queryStr += `ORDER BY ${sort_by} `
+    queryStr += `${order_by}`
+
+  return db
+    .query(queryStr, queryValues)
     .then(({ rows: articles }) => {
       return articles;
     });
-};
+}
 
 exports.fetchArticleComments = (articleId) => {
   return db

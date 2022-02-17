@@ -96,6 +96,36 @@ describe("GET", () => {
           });
         });
     });
+    test('Status: 200, should return the articles sorted by title', () => {
+        return request(app)
+        .get("/api/articles?sort_by=title")
+        .expect(200)
+        .then((res) => {
+            expect(res.body.articles).toBeSortedBy("title", {descending: true})
+        })
+      })
+      test('Status: 200, should return the articles sorted by body ordered ascending', () => {
+        return request(app)
+        .get("/api/articles?sort_by=body&order_by=ASC")
+        .expect(200)
+        .then((res) => {
+            expect(res.body.articles).toBeSortedBy("body", {ascending: true})
+        })
+      })
+      test('Status: 200, should return the articles where the topic is mitch', () => {
+        return request(app)
+        .get("/api/articles?topic=mitch")
+        .expect(200)
+        .then((res) => {
+            res.body.articles.forEach((article) => {
+                expect(article).toEqual(
+                    expect.objectContaining({
+                        topic: 'mitch'
+                    }) 
+                )
+            })
+        })
+      })
   });
   describe("/api/articles/:article_id/comments", () => {
     test("Status: 200, responds with an array of comments for the selected article", () => {
@@ -223,6 +253,19 @@ describe("ERRORS", () => {
             });
           });
       });
+    });
+    describe('/api/articles?query', () => {
+        test('Status: 400, return bad request when invalid query input', () => {
+            return request(app)
+            .get("/api/articles?topic=gary")
+            .expect(400)
+            .then((res) => {
+                console.log(res)
+                expect(res.body).toEqual({
+                    msg: "Bad request"
+                })
+            })
+        });
     });
   });
   describe("PATCH", () => {

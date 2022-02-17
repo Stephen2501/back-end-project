@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const {getTopics, getArticleById, patchArticle, getUsers, getArticles, getArticleComments, postComment} = require('./controllers/seed-controller')
-const {serverError, invalidPath, badRequest, notFound} = require('./controllers/error-controller')
+const {serverError, invalidPath, badQuery, badRequest, notFound} = require('./controllers/error-controller')
 app.use(express.json());
 
 app.get('/api/topics', getTopics);

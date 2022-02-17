@@ -7,7 +7,7 @@ const {
   fetchArticleComments,
   checkArticleExists,
   insertComment,
-  checkUserExists,
+  checkTopicExists,
 } = require("../models/seed-models");
 
 exports.getTopics = (req, res, next) => {
@@ -33,16 +33,14 @@ exports.getArticleById = (req, res, next) => {
 
 exports.patchArticle = (req, res, next) => {
   const articleId = req.params.article_id;
-  if (typeof req.body.votes === "undefined") {
-    res.status(400).send({ msg: "Missing required fields" });
-  } else if (typeof req.body.votes === "number") {
+
     updateArticle(articleId, req.body.votes).then((article) => {
       res.status(200).send({ article });
-    });
-  } else {
-    res.status(400).send({ msg: "Bad request" });
-  }
-};
+    })
+    .catch((err) => {
+        next(err)
+    })
+  } 
 
 exports.getUsers = (req, res, next) => {
   fetchUsers().then((users) => {
@@ -52,9 +50,12 @@ exports.getUsers = (req, res, next) => {
 
 exports.getArticles = (req, res, next) => {
   const { sort_by, order_by, topic } = req.query;
-  fetchArticles(sort_by, order_by, topic)
-    .then((articles) => {
-      res.status(200).send({ articles });
+  Promise.all([
+    fetchArticles(sort_by, order_by, topic),
+    checkTopicExists(topic),
+  ])
+    .then(([articles]) => {
+      res.status(200).send({ articles: articles });
     })
     .catch((err) => {
       next(err);

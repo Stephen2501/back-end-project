@@ -1,3 +1,4 @@
+const req = require("express/lib/request");
 const db = require("../db/connection");
 
 exports.fetchTopics = () => {
@@ -30,7 +31,16 @@ exports.fetchArticleById = (article_id) => {
 };
 
 exports.updateArticle = (articleId, votes) => {
-  return db
+    
+    console.log(votes)
+    if (typeof votes === "undefined") {
+        return Promise.reject({status: 400, msg: "Missing required field"})
+    }
+    if (typeof votes !== 'number'){
+        return Promise.reject({status: 400, msg: "Bad request" });
+    }
+   
+    return db
     .query(
       `UPDATE articles
         SET votes = votes + $2
@@ -41,7 +51,8 @@ exports.updateArticle = (articleId, votes) => {
     .then(({ rows }) => {
       return rows[0];
     });
-};
+   }
+
 
 exports.fetchUsers = () => {
   return db.query("SELECT * FROM users;").then(({ rows: users }) => {
@@ -53,19 +64,12 @@ exports.fetchArticles = (sort_by = 'created_at', order_by = 'DESC', topic) => {
    
     const validSortBys = ['article_id', 'title', 'body', 'author', 'topic', 'created_at', 'votes', 'comment_count']
     const validOrderBys = ['ASC', 'DESC']
-    const validTopics = ['mitch', 'cats']
     
     
-    if(!validSortBys.includes(sort_by)) {
+    if(!validSortBys.includes(sort_by) || !validOrderBys.includes(order_by)) {
         return Promise.reject({status: 400, msg: "Bad request"});
     }
     
-    if(!validOrderBys.includes(order_by)) {
-        return Promise.reject({status: 400, msg: "Bad request"});
-    }
-    
-
-
     let queryStr = `
     SELECT articles.*, COUNT(comments.article_id) AS comment_count 
     FROM articles 
@@ -73,9 +77,6 @@ exports.fetchArticles = (sort_by = 'created_at', order_by = 'DESC', topic) => {
 
     const queryValues = []
     if(topic) {
-        if(!validTopics.includes(topic)) {
-            return Promise.reject({status: 400, msg: "Bad request"});
-        }
         queryStr += `WHERE topic = $1 `;
         queryValues.push(topic)
     }
@@ -136,16 +137,19 @@ exports.insertComment = (articleId, newComment) => {
     });
 };
 
-exports.checkUserExists = (newComment) => {
-  const { username, body } = newComment;
-  return db
-    .query("SELECT * FROM users WHERE username = $1;", [username])
+exports.checkTopicExists = (topic) => {
+    if (topic !== undefined) {
+    return db 
+    .query("SELECT * FROM topics WHERE slug = $1;", [topic])
     .then((result) => {
-      if (result.rows.length === 0) {
-        return Promise.reject({
+        if (result.rows.length === 0) {
+          return Promise.reject({
             status: 400,
-            msg: "Bad request"
-        });
-      }
-    });
-};
+            msg: `Bad request`,
+          });
+        }
+      });
+    }
+    else return db.query("SELECT * FROM topics WHERE slug =$1;", [topic])
+    
+  };

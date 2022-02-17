@@ -32,7 +32,6 @@ exports.fetchArticleById = (article_id) => {
 
 exports.updateArticle = (articleId, votes) => {
     
-    console.log(votes)
     if (typeof votes === "undefined") {
         return Promise.reject({status: 400, msg: "Missing required field"})
     }
@@ -165,7 +164,6 @@ exports.checkTopicExists = (topic) => {
   exports.checkCommentExists = (comment_id) => {
     return db.query("SELECT * FROM comments WHERE comment_id = $1;" , [comment_id])
     .then((result) => {
-        console.log(result.rows)
         if(result.rows.length === 0) {
             return Promise.reject({
                 status: 404,

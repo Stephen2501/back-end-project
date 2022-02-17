@@ -10,8 +10,12 @@ exports.notFound = (err, req, res, next) => {
 }
 
 exports.badRequest = (err, req, res, next) => {
-    if(err.code === '22P02' || err.code === '23502' || err.code === '23503') {
+    console.log(err.code)
+    if(err.code === '22P02' || err.code === '23502') {
         res.status(400).send({msg: "Bad request"})
+    }
+    else if( err.code === '23503') {
+        res.status(404).send({ msg: 'Unable to find resource'})
     }
     else next(err)
 }

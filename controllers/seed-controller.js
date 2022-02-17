@@ -65,7 +65,6 @@ exports.postComment = (req, res, next) => {
     Promise.all([
         insertComment(article_id, req.body), 
         checkArticleExists(article_id),
-        checkUserExists(req.body)
     ])
     .then(([comment]) => {
         res.status(201).send({comment: comment})

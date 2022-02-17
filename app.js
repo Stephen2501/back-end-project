@@ -12,7 +12,9 @@ app.get('/api/articles/:article_id/comments', getArticleComments)
 
 app.patch('/api/articles/:article_id', patchArticle);
 
-app.post('/api/articles/:article_id/comments', postComment)
+app.post('/api/articles/:article_id/comments', postComment);
+
+
 
 app.all('/*', invalidPath);
 

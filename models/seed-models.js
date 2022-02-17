@@ -119,7 +119,10 @@ exports.checkUserExists = (newComment) => {
     .query("SELECT * FROM users WHERE username = $1;", [username])
     .then((result) => {
       if (result.rows.length === 0) {
-        return Promise.reject();
+        return Promise.reject({
+            status: 400,
+            msg: "Bad request"
+        });
       }
     });
 };

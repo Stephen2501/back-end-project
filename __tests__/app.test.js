@@ -244,7 +244,7 @@ describe('ERRORS', () => {
         });
     describe('POST', () => {
         describe('/api/articles/:article_id/comments', () => {
-            test.only('status: 404, article does not exist', () => {
+            test('status: 404, article does not exist', () => {
                 const newComment = {
                     username: "butter_bridge",
                     body: "What a wonderfully artistic vision",
@@ -252,9 +252,9 @@ describe('ERRORS', () => {
                 return request(app)
                 .post('/api/articles/999999/comments')
                 .send(newComment)
-                .expect(404)
+                .expect(400)
                 .then((res) => {
-                    expect(res.body).toEqual({msg: 'Unable to find resource'})
+                    expect(res.body).toEqual({msg: 'Bad request'})
                 })
             })
             test('Status: 400, bad request, missing required field', () => {

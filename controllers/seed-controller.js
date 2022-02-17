@@ -1,4 +1,4 @@
-const {fetchTopics, fetchArticleById, updateArticle, fetchUsers, fetchArticles, fetchArticleComments, checkArticleExists} = require('../models/seed-models')
+const {fetchTopics, fetchArticleById, updateArticle, fetchUsers, fetchArticles, fetchArticleComments, checkArticleExists, insertComment, checkUserExists} = require('../models/seed-models')
 
 exports.getTopics = (req, res, next) => {
     fetchTopics().then((topics) => {
@@ -54,6 +54,21 @@ exports.getArticleComments = (req, res, next) => {
     ])
     .then(([comments]) => {
         res.status(200).send({comments: comments})
+    })
+    .catch((err) => {
+        next(err)
+    })
+}
+
+exports.postComment = (req, res, next) => {
+    const {article_id} = req.params
+    Promise.all([
+        insertComment(article_id, req.body), 
+        checkArticleExists(article_id),
+        checkUserExists(req.body)
+    ])
+    .then(([comment]) => {
+        res.status(201).send({comment: comment})
     })
     .catch((err) => {
         next(err)

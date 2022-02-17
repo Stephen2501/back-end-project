@@ -121,10 +121,10 @@ describe('GET', () => {
             .expect(200)
             .then((res) => {
                 expect(res.body.comments).toEqual([])
+            });
         });
     });
-});
-
+})
 describe('PATCH', () => {
     describe('/api/articles/:article_id', () => {
         test('status: 200, responds with updated object', () => {
@@ -150,10 +150,37 @@ describe('PATCH', () => {
         })
     });
 })
-})
-describe('ERROR', () => {
+
+describe('POST', () => {
+    describe('/api/articles/:article_id/comments', () => {
+        test('Status: 201, returns the added object', () => {
+            const newComment = {
+                username: "butter_bridge",
+                body: "What a wonderfully artistic vision",
+            };
+            const expected = {
+                comment: {
+                    comment_id: 19,
+                    body: "What a wonderfully artistic vision",
+                    author: "butter_bridge",
+                    article_id: 1,
+                    created_at: expect.any(String),
+                    votes: 0
+                }
+            };
+            return request(app)
+            .post('/api/articles/1/comments')
+            .send(newComment)
+            .expect(201)
+            .then((res) => {
+                expect(res.body).toEqual(expected)
+            })
+        })
+    })
+});
+describe('ERRORS', () => {
     describe('GET', () => {
-        describe('api/topics', () => {
+        describe('/api/topics', () => {
             test('status: 404, returns invalid path string', () => {
                 return request(app)
                 .get("/api/invalidPath")
@@ -191,6 +218,7 @@ describe('ERROR', () => {
                 })
             })
         });
+    })
     describe('PATCH', () => {
         describe('/api/articles/:article_id', () => {
             test('status: 400, returns an empty object - malformed body', () => {
@@ -214,5 +242,44 @@ describe('ERROR', () => {
                 });
             })
         });
+    describe('POST', () => {
+        describe('/api/articles/:article_id/comments', () => {
+            test('status: 404, article does not exist', () => {
+                const newComment = {
+                    username: "butter_bridge",
+                    body: "What a wonderfully artistic vision",
+                };
+                return request(app)
+                .post('/api/articles/999999/comments')
+                .send(newComment)
+                .expect(400)
+                .then((res) => {
+                    expect(res.body).toEqual({msg: 'Bad request'})
+                })
+            })
+            test('Status: 400, bad request, missing required field', () => {
+                const newComment = {}
+                return request(app)
+                .post('/api/articles/1/comments')
+                .send(newComment)
+                .expect(400)
+                .then((res) => {
+                    expect(res.body).toEqual({msg: 'Bad request'})
+                })
+            });
+            test('Status: 400, failed schema validation', () => {
+                const newComment = {
+                    username: "steve",
+                    body: "What a wonderfully artistic vision",
+                };
+                return request(app)
+                .post('/api/articles/1/comments')
+                .send(newComment)
+                .expect(400)
+                .then((res) => {
+                    expect(res.body).toEqual({msg: 'Bad request'})
+            });
+        });
     })
+})
 })

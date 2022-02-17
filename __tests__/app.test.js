@@ -210,7 +210,15 @@ describe("POST", () => {
   });
 });
 
-
+describe("DELETE", () => {
+    describe('/api/comments/:comment_id', () => {
+        test('Status: 204', () => {
+            return request(app)
+            .delete("/api/comments/2")
+            .expect(204)
+        });
+    });
+  });
 
 describe("ERRORS", () => {
   describe("GET", () => {
@@ -332,5 +340,28 @@ describe("ERRORS", () => {
       });
     });
   });
-  
+  describe('DELETE', () => {
+    describe('/api/comments/:comment_id', () => {
+        test('Status: 404', () => {
+            return request(app)
+            .delete('/api/comments/999999')
+            .expect(404)
+            .then((res) => {
+                expect(res.body).toEqual({
+                    msg: "Unable to find resource"
+                })
+            })
+        });
+        test('Status: 400', () => {
+          return request(app)
+          .delete('/api/comments/invalid')
+          .expect(400)
+          .then((res) => {
+              expect(res.body).toEqual({
+                  msg: "Bad request"
+              })
+          })
+      });
+    });
+  });
 });

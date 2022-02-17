@@ -8,6 +8,8 @@ const {
   checkArticleExists,
   insertComment,
   checkTopicExists,
+  removeComment,
+  checkCommentExists
 } = require("../models/seed-models");
 
 exports.getTopics = (req, res, next) => {
@@ -89,3 +91,18 @@ exports.postComment = (req, res, next) => {
       next(err);
     });
 };
+
+
+exports.deleteComment = (req, res, next) => {
+    const {comment_id} = req.params
+    checkCommentExists(comment_id)
+    .then(() => {
+        removeComment(comment_id)
+    })
+    .then(() => {
+        res.status(204).send();
+    })
+    .catch((err) => {
+        next(err)
+    })
+  }

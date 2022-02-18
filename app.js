@@ -1,9 +1,13 @@
 const express = require('express');
 const app = express();
-const {getTopics, getArticleById, patchArticle, getUsers, getArticles, getArticleComments, postComment, deleteComment} = require('./controllers/seed-controller')
+const { getTopics, getArticleById, patchArticle, getUsers, getArticles, getArticleComments, postComment, deleteComment} = require('./controllers/seed-controller')
 const {serverError, invalidPath, badRequest, notFound} = require('./controllers/error-controller')
+const getEndPoint = require('./controllers/api-controller');
+
 app.use(express.json());
 
+
+app.get('/api', getEndPoint);
 app.get('/api/topics', getTopics);
 app.get('/api/articles', getArticles);
 app.get('/api/articles/:article_id', getArticleById);

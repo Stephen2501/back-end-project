@@ -6,6 +6,14 @@ const data = require("../db/data/test-data");
 beforeEach(() => seed(data));
 
 describe("GET", () => {
+  describe('/api', () => {
+    test('Status: 200, responds with the JSON describing endpoints', () => {
+      return request(app)
+      .get("/api")
+      .expect(200)
+
+      })
+  });
   describe("/api/topics", () => {
     test("status: 200, responds with an array of topics", () => {
       return request(app)

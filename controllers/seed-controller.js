@@ -12,6 +12,8 @@ const {
   checkCommentExists
 } = require("../models/seed-models");
 
+
+
 exports.getTopics = (req, res, next) => {
   fetchTopics()
     .then((topics) => {
@@ -103,3 +105,4 @@ exports.deleteComment = (req, res, next) => {
         next(err)
     })
   }
+

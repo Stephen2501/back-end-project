@@ -23,7 +23,7 @@ exports.fetchArticleById = (article_id) => {
       if (!article) {
         return Promise.reject({
           status: 404,
-          msg: `No article found for article_id: ${article_id}`,
+          msg: `Unable to find resource`,
         });
       }
       return article;
@@ -32,7 +32,6 @@ exports.fetchArticleById = (article_id) => {
 
 exports.updateArticle = (articleId, votes) => {
     
-    console.log(votes)
     if (typeof votes === "undefined") {
         return Promise.reject({status: 400, msg: "Missing required field"})
     }
@@ -113,7 +112,7 @@ exports.checkArticleExists = (articleId) => {
       if (result.rows.length === 0) {
         return Promise.reject({
           status: 404,
-          msg: `No article found for article_id: ${articleId}`,
+          msg: `Unable to find resource`,
         });
       }
     });
@@ -131,8 +130,6 @@ exports.insertComment = (articleId, newComment) => {
       [articleId, username, body]
     )
     .then(({ rows }) => {
-      
-      
       return rows[0];
     });
 };
@@ -150,6 +147,24 @@ exports.checkTopicExists = (topic) => {
         }
       });
     }
-    else return db.query("SELECT * FROM topics WHERE slug =$1;", [topic])
-    
   };
+
+
+  exports.removeComment = (comment_id) => {
+    return db
+    .query(
+        `DELETE FROM comments
+        WHERE comment_id = $1
+        RETURNING *;
+    `, [comment_id])
+    .then((result) => {
+      console.log(result)
+      if(result.rows.length === 0) {
+        return Promise.reject({
+            status: 404,
+            msg: "Unable to find resource"
+          })
+        }
+      }
+    )}
+

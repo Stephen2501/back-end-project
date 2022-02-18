@@ -23,7 +23,7 @@ exports.fetchArticleById = (article_id) => {
       if (!article) {
         return Promise.reject({
           status: 404,
-          msg: `No article found for article_id: ${article_id}`,
+          msg: `Unable to find resource`,
         });
       }
       return article;
@@ -112,7 +112,7 @@ exports.checkArticleExists = (articleId) => {
       if (result.rows.length === 0) {
         return Promise.reject({
           status: 404,
-          msg: `No article found for article_id: ${articleId}`,
+          msg: `Unable to find resource`,
         });
       }
     });
@@ -130,8 +130,6 @@ exports.insertComment = (articleId, newComment) => {
       [articleId, username, body]
     )
     .then(({ rows }) => {
-      
-      
       return rows[0];
     });
 };
@@ -159,16 +157,14 @@ exports.checkTopicExists = (topic) => {
         WHERE comment_id = $1
         RETURNING *;
     `, [comment_id])
-  }
-
-  exports.checkCommentExists = (comment_id) => {
-    return db.query("SELECT * FROM comments WHERE comment_id = $1;" , [comment_id])
     .then((result) => {
-        if(result.rows.length === 0) {
-            return Promise.reject({
-                status: 404,
-                msg: "Unable to find resource"
-            })
+      console.log(result)
+      if(result.rows.length === 0) {
+        return Promise.reject({
+            status: 404,
+            msg: "Unable to find resource"
+          })
         }
-    })
-  }
+      }
+    )}
+

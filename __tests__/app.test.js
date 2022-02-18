@@ -247,7 +247,7 @@ describe("ERRORS", () => {
           .expect(404)
           .then((res) => {
             expect(res.body).toEqual({
-              msg: "No article found for article_id: 9999999",
+              msg: "Unable to find resource",
             });
           });
       });
@@ -259,7 +259,7 @@ describe("ERRORS", () => {
           .expect(404)
           .then((res) => {
             expect(res.body).toEqual({
-              msg: "No article found for article_id: 99999",
+              msg: "Unable to find resource",
             });
           });
       });

@@ -150,7 +150,7 @@ exports.checkTopicExists = (topic) => {
   };
 
 
-  exports.removeComment = (comment_id) => {
+exports.removeComment = (comment_id) => {
     return db
     .query(
         `DELETE FROM comments
@@ -166,4 +166,19 @@ exports.checkTopicExists = (topic) => {
         }
       }
     )}
+
+exports.fetchUserByUsername = (username) => {
+  return db
+  .query(`SELECT * FROM users WHERE username = $1;`, [username])
+  .then(({ rows }) => {
+    const user = rows[0];
+    if (!user) {
+      return Promise.reject({
+        status: 404,
+        msg: `Unable to find resource`,
+      });
+    }
+    return user;
+  });
+};
 

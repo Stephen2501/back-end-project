@@ -22,12 +22,7 @@ You must create a .env.test and .env.development files in the main folder which 
 You will need to install the below packages for using this project using the below command lines in the terminal of this project:
 
 ``` 
-$ npm i jest
-$ npm i jest-sorted
-$ npm i express
-$ npm i supertest
-$ npm i pg
-$ npm i dotenv
+$ npm i
 ```
 
 Once these are installed, you can test the current testsuite by running:

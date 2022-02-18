@@ -164,6 +164,22 @@ describe("GET", () => {
         });
     });
   });
+  describe("/api/users/:username", () => {
+    test('Status: 200, returns the specified user', () => {
+      return request(app)
+      .get('/api/users/butter_bridge')
+      .expect(200)
+      .then(({body}) => {
+        expect(body.user).toEqual(
+          expect.objectContaining({
+            username: 'butter_bridge',
+            name: 'jonny',
+            avatar_url: 'https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg'
+          })
+        )
+      })
+    })
+  })
 });
 
 describe("PATCH", () => {
@@ -283,6 +299,16 @@ describe("ERRORS", () => {
               msg: "Bad request",
             });
           });
+      });
+    });
+    describe('/api/users/:username', () => {
+      test('Status: 404, unable to find resource', () => {
+        return request(app)
+        .get("/api/users/butter")
+        .expect(404)
+        .then((res) => {
+          expect(res.body.msg).toEqual('Unable to find resource') 
+        })
       });
     });
   });

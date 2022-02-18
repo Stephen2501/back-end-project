@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const { getTopics, getArticleById, patchArticle, getUsers, getArticles, getArticleComments, postComment, deleteComment} = require('./controllers/seed-controller')
+const { getTopics, getArticleById, patchArticle, getUsers, getArticles, getArticleComments, postComment, deleteComment, getUserByUsername} = require('./controllers/seed-controller')
 const {serverError, invalidPath, badRequest, notFound} = require('./controllers/error-controller')
 const getEndPoint = require('./controllers/api-controller');
 
@@ -13,6 +13,7 @@ app.get('/api/articles', getArticles);
 app.get('/api/articles/:article_id', getArticleById);
 app.get('/api/users', getUsers)
 app.get('/api/articles/:article_id/comments', getArticleComments)
+app.get('/api/users/:username', getUserByUsername);
 
 app.patch('/api/articles/:article_id', patchArticle);
 

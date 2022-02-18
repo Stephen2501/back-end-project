@@ -9,7 +9,7 @@ const {
   insertComment,
   checkTopicExists,
   removeComment,
-  checkCommentExists
+  fetchUserByUsername
 } = require("../models/seed-models");
 
 
@@ -94,7 +94,6 @@ exports.postComment = (req, res, next) => {
     });
 };
 
-
 exports.deleteComment = (req, res, next) => {
     const {comment_id} = req.params
         removeComment(comment_id)
@@ -105,4 +104,15 @@ exports.deleteComment = (req, res, next) => {
         next(err)
     })
   }
+
+exports.getUserByUsername = (req, res, next) => {
+  const {username} = req.params
+  fetchUserByUsername(username)
+  .then((user) => {
+    res.status(200).send({user})
+  })
+  .catch((err) => {
+    next(err)
+  })
+}  
 

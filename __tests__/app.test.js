@@ -165,6 +165,7 @@ describe("GET", () => {
     });
   });
 });
+
 describe("PATCH", () => {
   describe("/api/articles/:article_id", () => {
     test("status: 200, responds with updated object", () => {

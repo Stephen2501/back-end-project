@@ -1,9 +1,14 @@
 const express = require('express');
+const cors = require('cors');
+
 const app = express();
 const { getTopics, getArticleById, patchArticle, getUsers, getArticles, getArticleComments, postComment, deleteComment} = require('./controllers/seed-controller')
 const {serverError, invalidPath, badRequest, notFound} = require('./controllers/error-controller')
 const getEndPoint = require('./controllers/api-controller');
 
+
+
+app.use(cors());
 app.use(express.json());
 
 

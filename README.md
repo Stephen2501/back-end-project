@@ -37,14 +37,6 @@ $ npm test
 
 This will reseed the database and then run the tests and will reseed before every test, thus stopping any test outcome from effecting the next test.
 
-If you want a better look at the data being brought back from the query searches, enter the query.sql file and enter the raw query as text and then run:
-
-```
-$ npm run query
-```
-
-This will output the result of the query into the query.txt file, if this query fails, you will get more detailed information on why the query has failed than you will normally get in the terminal.
-
 
 ### Technology
 

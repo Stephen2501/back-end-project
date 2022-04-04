@@ -1,6 +1,0 @@
-You are now connected to database "nc_news_test" as user "stephencocks".
- slug  |          description           
--------+--------------------------------
- mitch | The man, the Mitch, the legend
-(1 row)
-
